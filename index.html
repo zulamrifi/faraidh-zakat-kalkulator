@@ -908,7 +908,11 @@ function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
-  event.target.classList.add('active');
+  if (window.event && window.event.currentTarget) {
+    window.event.currentTarget.classList.add('active');
+  } else if (window.event && window.event.target) {
+    window.event.target.classList.add('active');
+  }
 }
 
 // ===================================================
@@ -949,7 +953,6 @@ function hitungWaris() {
 
   // Ahli waris input
   const adaSuami = getChk('suami') && jenisMayyit === 'perempuan';
-  // UPDATE: Tangkap value dari select dropdown Istri
   const jumlahIstri = getVal('istri'); 
   const adaIstri = jumlahIstri > 0 && jenisMayyit === 'laki';
   
@@ -976,7 +979,7 @@ function hitungWaris() {
   const adaSdrPerempuan = sdrPerempuan > 0;
   const adaSdr = adaSdrLaki || adaSdrPerempuan;
 
-  let ahliWaris = []; // {nama, bagian_penyebut [num,den], nominal, hajb, alasan_hajb, jenis}
+  let ahliWaris = []; 
   let penjelasan = [];
   let aul = false, radd = false, ummariyatayn = false;
 
@@ -996,7 +999,7 @@ function hitungWaris() {
     else { fardh = [1,2]; alasan = 'Suami mendapat 1/2 karena tidak ada anak/cucu.'; }
     ahli.push({id:'suami', nama:'Suami', jumlah:1, hajb:false, alasan_hajb:'', fardh, ashobah:false, alasan});
   }
-  // ISTRI (UPDATE: Logika jika istri lebih dari 1)
+  // ISTRI
   if (adaIstri) {
     let fardh, alasan;
     if (adaAnak || adaCucu) { fardh = [1,8]; alasan = jumlahIstri > 1 ? `Istri (${jumlahIstri} org) berbagi 1/8 karena pewaris meninggalkan anak/cucu.` : 'Istri mendapat 1/8 karena pewaris meninggalkan anak/cucu.'; }
@@ -1177,14 +1180,14 @@ function hitungWaris() {
     }
   }
 
-  // UPDATE 5: Koreksi Unit Ashobah (2:1 untuk Anak/Cucu/Saudara)
+  // UPDATE 5: Koreksi Unit Ashobah
   let ashobahList = ahliAktif.filter(a => a.ashobah && !a.ashobahBersama);
   let ashobahBersamaList = ahliAktif.filter(a => a.ashobah && a.ashobahBersama);
   
   let totalUnitAshobah = 0;
   ashobahList.forEach(a => {
-    // Memastikan laki-laki (anak, cucu, dan SAUDARA laki) dihitung 2 unit
-    if ['anak-laki', 'cucu-laki', 'sdr-laki', 'sdr-laki-ayah'].includes(a.id)) {
+    // Memastikan laki-laki dihitung 2 unit
+    if (['anak-laki', 'cucu-laki', 'sdr-laki', 'sdr-laki-ayah'].includes(a.id)) {
       totalUnitAshobah += a.jumlah * 2;
     } else {
       totalUnitAshobah += a.jumlah;
@@ -1220,7 +1223,6 @@ function hitungWaris() {
         nominal = 0;
       } else {
         let unit;
-        // Koreksi unit individu ashobah
         if (['anak-laki', 'cucu-laki', 'sdr-laki', 'sdr-laki-ayah'].includes(a.id)) {
             unit = a.jumlah * 2;
         } else {
@@ -1396,7 +1398,9 @@ function selectZakat(type) {
   activeZakat = type;
   document.querySelectorAll('.zakat-type-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.zakat-form-section').forEach(f => f.classList.remove('active'));
-  event.currentTarget.classList.add('active');
+  if (window.event && window.event.currentTarget) {
+    window.event.currentTarget.classList.add('active');
+  }
   document.getElementById('form-' + type).classList.add('active');
   document.getElementById('zakat-result').style.display = 'none';
 }
@@ -1619,7 +1623,9 @@ let activeTab = 'semua';
 function filterTab(tab) {
   activeTab = tab;
   document.querySelectorAll('.glos-tab').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
+  if (window.event && window.event.target) {
+    window.event.target.classList.add('active');
+  }
   filterGlosarium();
 }
 
