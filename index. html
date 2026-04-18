@@ -1,0 +1,1638 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mirath & Zakat — Kalkulator Islam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Nastaliq+Urdu:wght@400;600&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green-deep: #1a3a2a;
+  --green-rich: #2d5a3d;
+  --green-mid: #3d7a52;
+  --green-light: #5a9e6f;
+  --green-pale: #8ec9a0;
+  --green-mist: #c8e6d0;
+  --green-whisper: #eaf5ed;
+  --gold: #c9a227;
+  --gold-light: #e8c55a;
+  --gold-pale: #f5e8b8;
+  --ivory: #faf8f2;
+  --text-dark: #1a2e22;
+  --text-mid: #3a5244;
+  --text-light: #6b8c78;
+  --shadow: rgba(26,58,42,0.15);
+  --border: rgba(61,122,82,0.2);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Source Serif 4', Georgia, serif;
+  background: var(--ivory);
+  color: var(--text-dark);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ============ HEADER ============ */
+header {
+  background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-rich) 60%, var(--green-mid) 100%);
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(201,162,39,0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(201,162,39,0.06) 0%, transparent 40%);
+}
+.header-pattern {
+  position: absolute; inset: 0; opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M30 0 L35 10 L45 10 L37 16 L40 27 L30 21 L20 27 L23 16 L15 10 L25 10 Z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.header-inner {
+  position: relative; z-index: 1;
+  text-align: center;
+  padding: 48px 24px 40px;
+}
+.header-bismillah {
+  font-family: 'Noto Nastaliq Urdu', serif;
+  font-size: clamp(22px, 5vw, 32px);
+  color: var(--gold-light);
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+  opacity: 0.9;
+}
+.header-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 6vw, 52px);
+  color: var(--ivory);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+.header-title span { color: var(--gold-light); }
+.header-sub {
+  font-size: clamp(13px, 2.5vw, 16px);
+  color: var(--green-mist);
+  letter-spacing: 0.5px;
+  opacity: 0.85;
+  margin-bottom: 32px;
+}
+.header-ornament {
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  margin-bottom: 28px;
+}
+.ornament-line { width: 80px; height: 1px; background: linear-gradient(to right, transparent, var(--gold)); }
+.ornament-line.r { background: linear-gradient(to left, transparent, var(--gold)); }
+.ornament-star { color: var(--gold); font-size: 18px; }
+
+/* ============ NAV ============ */
+nav {
+  background: var(--green-deep);
+  border-bottom: 2px solid var(--gold);
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 4px 20px var(--shadow);
+}
+.nav-inner {
+  display: flex; justify-content: center; flex-wrap: wrap;
+  max-width: 900px; margin: 0 auto;
+}
+.nav-btn {
+  background: none; border: none; cursor: pointer;
+  color: var(--green-mist);
+  font-family: 'Source Serif 4', serif;
+  font-size: 14px; font-weight: 500;
+  padding: 16px 28px;
+  letter-spacing: 0.3px;
+  position: relative;
+  transition: color 0.25s;
+}
+.nav-btn::after {
+  content: ''; position: absolute; bottom: 0; left: 50%; right: 50%;
+  height: 2px; background: var(--gold);
+  transition: left 0.25s, right 0.25s;
+}
+.nav-btn:hover, .nav-btn.active { color: var(--gold-light); }
+.nav-btn.active::after, .nav-btn:hover::after { left: 16px; right: 16px; }
+
+/* ============ MAIN ============ */
+main { max-width: 1000px; margin: 0 auto; padding: 40px 16px 80px; }
+.page { display: none; }
+.page.active { display: block; animation: fadeUp 0.4s ease; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+/* ============ SECTION TITLE ============ */
+.section-header {
+  text-align: center; margin-bottom: 36px;
+}
+.section-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(22px, 4vw, 32px);
+  color: var(--green-deep);
+  margin-bottom: 8px;
+}
+.section-header p { color: var(--text-light); font-size: 15px; }
+.divider {
+  display: flex; align-items: center; gap: 12px;
+  margin: 12px auto; max-width: 300px;
+}
+.divider-line { flex: 1; height: 1px; background: var(--green-pale); }
+.divider-gem { color: var(--gold); font-size: 14px; }
+
+/* ============ CARD ============ */
+.card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 12px var(--shadow);
+}
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px; color: var(--green-deep);
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.card-title .icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--green-whisper);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  border: 1px solid var(--green-mist);
+}
+
+/* ============ FORM ============ */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media(max-width:600px) { .form-grid { grid-template-columns: 1fr; } }
+
+label { display: block; font-size: 13px; color: var(--text-mid); margin-bottom: 5px; font-weight: 500; }
+input[type=number], select {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-family: 'Source Serif 4', serif;
+  font-size: 15px;
+  color: var(--text-dark);
+  background: var(--green-whisper);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  -webkit-appearance: none;
+}
+input[type=number]:focus, select:focus {
+  outline: none;
+  border-color: var(--green-mid);
+  box-shadow: 0 0 0 3px rgba(61,122,82,0.12);
+}
+
+.checkbox-group { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+.checkbox-item {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--green-whisper);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+}
+.checkbox-item:hover { border-color: var(--green-mid); background: var(--green-mist); }
+.checkbox-item input { accent-color: var(--green-rich); }
+.checkbox-item.checked { border-color: var(--green-mid); background: var(--green-mist); }
+
+/* ============ BTN ============ */
+.btn-primary {
+  background: linear-gradient(135deg, var(--green-rich), var(--green-mid));
+  color: white; border: none; cursor: pointer;
+  font-family: 'Source Serif 4', serif;
+  font-size: 15px; font-weight: 500;
+  padding: 14px 36px; border-radius: 12px;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 16px rgba(45,90,61,0.3);
+  transition: transform 0.15s, box-shadow 0.15s;
+  display: block; width: 100%; margin-top: 20px;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(45,90,61,0.4); }
+.btn-primary:active { transform: translateY(0); }
+
+.btn-reset {
+  background: none; border: 1.5px solid var(--border);
+  color: var(--text-light); cursor: pointer;
+  font-size: 13px; padding: 10px 20px; border-radius: 10px;
+  margin-top: 10px; width: 100%;
+  transition: all 0.2s;
+}
+.btn-reset:hover { border-color: var(--green-mid); color: var(--green-mid); }
+
+/* ============ RESULT ============ */
+#faraidh-result, #zakat-result { display: none; }
+
+.result-box {
+  background: linear-gradient(135deg, var(--green-deep), var(--green-rich));
+  border-radius: 16px; padding: 28px;
+  color: white; margin-bottom: 20px;
+  position: relative; overflow: hidden;
+}
+.result-box::before {
+  content: ''; position: absolute; top: -30px; right: -30px;
+  width: 150px; height: 150px; border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+}
+.result-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px; color: var(--gold-light);
+  margin-bottom: 6px;
+}
+.result-harta-pokok {
+  font-size: 28px; font-weight: 600;
+  color: white; margin-bottom: 4px;
+}
+.result-sub { font-size: 13px; color: var(--green-pale); }
+
+.ahli-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 12px; margin-top: 16px; }
+.ahli-card {
+  background: white; border-radius: 12px; padding: 16px;
+  border-left: 4px solid var(--green-mid);
+  box-shadow: 0 2px 8px var(--shadow);
+}
+.ahli-card.mendapat { border-left-color: var(--green-mid); }
+.ahli-card.hajb { border-left-color: #e0a0a0; background: #fff8f8; }
+.ahli-name { font-weight: 600; font-size: 15px; color: var(--green-deep); margin-bottom: 4px; }
+.ahli-bagian { font-size: 20px; font-weight: 700; color: var(--green-rich); }
+.ahli-nominal { font-size: 13px; color: var(--text-light); }
+.ahli-status { font-size: 12px; color: #c06060; }
+.ahli-alasan { font-size: 12px; color: var(--text-light); margin-top: 4px; font-style: italic; }
+
+.info-box {
+  border-radius: 12px; padding: 16px 20px; margin-bottom: 12px;
+  border-left: 4px solid;
+  font-size: 14px; line-height: 1.6;
+}
+.info-box.aul { background: #fff9e6; border-color: #e8c55a; color: #7a6020; }
+.info-box.radd { background: #e8f5ff; border-color: #5aa0e8; color: #204060; }
+.info-box.ummariyatayn { background: #f0f5ff; border-color: #8098e0; color: #2a3570; }
+.info-box strong { display: block; margin-bottom: 4px; font-size: 15px; }
+
+/* ============ DIAGRAM ============ */
+.diagram-container {
+  background: white; border-radius: 16px;
+  border: 1px solid var(--border);
+  padding: 24px; margin-bottom: 24px;
+  overflow-x: auto;
+}
+.diagram-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px; color: var(--green-deep);
+  margin-bottom: 16px; text-align: center;
+}
+#family-tree {
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+  min-width: 320px;
+}
+.tree-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: center; }
+.tree-node {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 4px;
+}
+.tree-node-box {
+  padding: 8px 14px; border-radius: 10px;
+  font-size: 13px; font-weight: 600; text-align: center;
+  min-width: 90px; position: relative;
+}
+.tree-node-box.mendapat {
+  background: var(--green-mist); border: 2px solid var(--green-mid);
+  color: var(--green-deep);
+}
+.tree-node-box.hajb {
+  background: #ffe8e8; border: 2px dashed #e08080;
+  color: #906060; text-decoration: line-through;
+}
+.tree-node-box.mayyit {
+  background: var(--green-deep); border: 2px solid var(--gold);
+  color: white; font-size: 14px;
+}
+.tree-node-bagian {
+  font-size: 13px; font-weight: 700; color: var(--green-rich);
+}
+.tree-node-hajb-text { font-size: 11px; color: #c06060; }
+
+.tree-connector {
+  display: flex; justify-content: center;
+  color: var(--green-pale); font-size: 20px;
+  line-height: 1;
+}
+
+/* ============ ZAKAT ============ */
+.zakat-type-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); gap: 10px; margin-bottom: 24px; }
+.zakat-type-btn {
+  background: var(--green-whisper); border: 2px solid var(--border);
+  border-radius: 12px; padding: 14px 10px; text-align: center;
+  cursor: pointer; transition: all 0.2s;
+  font-family: 'Source Serif 4', serif;
+}
+.zakat-type-btn .zt-icon { font-size: 22px; margin-bottom: 6px; }
+.zakat-type-btn .zt-name { font-size: 13px; color: var(--text-dark); font-weight: 500; }
+.zakat-type-btn:hover, .zakat-type-btn.active {
+  border-color: var(--green-mid);
+  background: var(--green-mist);
+}
+.zakat-type-btn.active { border-color: var(--green-rich); }
+
+.zakat-form-section { display: none; }
+.zakat-form-section.active { display: block; animation: fadeUp 0.3s ease; }
+
+.result-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 0; border-bottom: 1px solid var(--border);
+  font-size: 15px;
+}
+.result-row:last-child { border-bottom: none; }
+.result-row span:first-child { color: var(--text-mid); }
+.result-row span:last-child { font-weight: 600; color: var(--green-deep); }
+.result-row.total span { font-size: 18px; color: var(--green-rich); }
+.result-row.nisab-check span:last-child { color: green; }
+.result-row.nisab-check.tidak span:last-child { color: #c06060; }
+.result-wajib {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--green-deep); border-radius: 12px;
+  padding: 20px; text-align: center; margin-top: 16px;
+}
+.result-wajib .rw-label { font-size: 14px; margin-bottom: 4px; }
+.result-wajib .rw-amount { font-size: 28px; font-weight: 700; }
+.result-tidak-wajib {
+  background: var(--green-whisper); border-radius: 12px;
+  padding: 16px; text-align: center; margin-top: 16px;
+  color: var(--text-mid); font-size: 15px;
+}
+
+/* ============ GLOSARIUM ============ */
+.search-box {
+  position: relative; margin-bottom: 24px;
+}
+.search-box input {
+  padding-left: 42px; background: white;
+  border: 1.5px solid var(--border);
+}
+.search-box::before {
+  content: '🔍'; position: absolute;
+  left: 14px; top: 50%; transform: translateY(-50%);
+  font-size: 16px; pointer-events: none;
+}
+.glos-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+.glos-tab {
+  padding: 8px 20px; border-radius: 20px;
+  font-size: 14px; cursor: pointer; border: none;
+  font-family: 'Source Serif 4', serif;
+  background: var(--green-whisper); color: var(--text-mid);
+  border: 1.5px solid var(--border);
+  transition: all 0.2s;
+}
+.glos-tab.active, .glos-tab:hover {
+  background: var(--green-rich); color: white; border-color: var(--green-rich);
+}
+
+.glos-item {
+  background: white; border-radius: 12px;
+  border: 1px solid var(--border);
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+.glos-item:hover { box-shadow: 0 4px 16px var(--shadow); }
+.glos-header {
+  padding: 16px 20px; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.glos-term { font-family: 'Playfair Display', serif; font-size: 17px; color: var(--green-deep); }
+.glos-arabic { font-size: 18px; color: var(--gold); margin-left: 10px; }
+.glos-chevron { color: var(--green-light); transition: transform 0.25s; font-size: 13px; }
+.glos-item.open .glos-chevron { transform: rotate(180deg); }
+.glos-body {
+  display: none; padding: 0 20px 18px;
+  font-size: 14.5px; line-height: 1.7; color: var(--text-mid);
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+}
+.glos-item.open .glos-body { display: block; }
+.glos-tag {
+  display: inline-block; font-size: 11px;
+  padding: 2px 10px; border-radius: 20px; margin-bottom: 8px;
+  font-weight: 600; letter-spacing: 0.3px;
+}
+.glos-tag.waris { background: var(--green-mist); color: var(--green-rich); }
+.glos-tag.zakat { background: var(--gold-pale); color: #7a6020; }
+
+/* ============ FOOTER ============ */
+footer {
+  background: var(--green-deep); color: var(--green-pale);
+  text-align: center; padding: 28px 16px;
+  font-size: 13px; line-height: 1.8;
+  border-top: 2px solid var(--gold);
+}
+footer .footer-quote {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px; color: var(--gold-light);
+  font-style: italic; margin-bottom: 8px;
+}
+
+/* ============ BADGE ============ */
+.badge {
+  display: inline-block; font-size: 11px;
+  padding: 3px 10px; border-radius: 20px;
+  font-weight: 600; margin-left: 6px;
+  vertical-align: middle;
+}
+.badge.aul { background: #fff0b0; color: #7a6020; }
+.badge.radd { background: #d0eeff; color: #204a7a; }
+.badge.ummariyatayn { background: #e0e8ff; color: #2a3870; }
+
+/* RESPONSIVE */
+@media(max-width:480px) {
+  .nav-btn { padding: 13px 16px; font-size: 13px; }
+  .card { padding: 20px; }
+  .result-box { padding: 20px; }
+  .ahli-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-pattern"></div>
+  <div class="header-inner">
+    <div class="header-bismillah">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</div>
+    <div class="header-ornament">
+      <div class="ornament-line"></div>
+      <div class="ornament-star">✦</div>
+      <div class="ornament-line r"></div>
+    </div>
+    <h1 class="header-title">Mirath & <span>Zakat</span></h1>
+    <div class="header-sub">Kalkulator Faraidh & Zakat Islam · Edukasi Hukum Waris & Zakat<br><strong style="color: var(--gold-light); font-size: 15px; margin-top: 6px; display: inline-block;">Penyuluh Agama KUA Kecamatan Sekongkang</strong></div>
+  </div>
+</header>
+
+<nav>
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="showPage('waris')">⚖️ Kalkulator Waris</button>
+    <button class="nav-btn" onclick="showPage('zakat')">🌙 Kalkulator Zakat</button>
+    <button class="nav-btn" onclick="showPage('glosarium')">📖 Glosarium</button>
+  </div>
+</nav>
+
+<main>
+
+<div id="page-waris" class="page active">
+  <div class="section-header">
+    <h2>Kalkulator Faraidh</h2>
+    <div class="divider"><div class="divider-line"></div><div class="divider-gem">✦</div><div class="divider-line"></div></div>
+    <p>Hitung pembagian warisan sesuai syariat Islam (Al-Quran, Hadits, dan Ijma' Ulama)</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">💰</div> Harta Peninggalan</div>
+    <div class="form-grid">
+      <div>
+        <label>Jumlah Harta Warisan (Rp)</label>
+        <input type="number" id="total-harta" placeholder="Contoh: 100000000" min="0">
+      </div>
+      <div>
+        <label>Hutang Almarhum (Rp)</label>
+        <input type="number" id="hutang" placeholder="0" min="0" value="0">
+      </div>
+      <div>
+        <label>Wasiat (maks. 1/3 harta bersih) (Rp)</label>
+        <input type="number" id="wasiat" placeholder="0" min="0" value="0">
+      </div>
+      <div>
+        <label>Biaya Pemakaman (Rp)</label>
+        <input type="number" id="biaya-pemakaman" placeholder="0" min="0" value="0">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">👤</div> Almarhum/Almarhumah</div>
+    <div class="form-grid">
+      <div>
+        <label>Jenis Kelamin Almarhum</label>
+        <select id="jenis-mayyit">
+          <option value="laki">Laki-laki</option>
+          <option value="perempuan">Perempuan</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">👨‍👩‍👧</div> Ahli Waris yang Ditinggalkan</div>
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:14px;">Pilih ahli waris yang <strong>masih hidup</strong> saat pewaris meninggal.</p>
+
+    <div style="margin-bottom:18px;">
+      <label style="font-size:14px;color:var(--green-deep);font-weight:600;margin-bottom:10px;display:block;">▸ Pasangan</label>
+      <div class="checkbox-group" id="group-pasangan" style="align-items: center;">
+        <label class="checkbox-item"><input type="checkbox" id="suami"> Suami</label>
+        <div style="display:flex; align-items:center; gap:8px; background:var(--green-whisper); padding:8px 14px; border-radius:8px; border:1.5px solid var(--border);">
+          <label style="margin:0; font-size:14px; cursor:pointer;">Jumlah Istri:</label>
+          <select id="istri" style="padding:4px; border-radius:6px; width:60px; font-size:14px;">
+            <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:18px;">
+      <label style="font-size:14px;color:var(--green-deep);font-weight:600;margin-bottom:10px;display:block;">▸ Anak</label>
+      <div class="form-grid">
+        <div>
+          <label>Jumlah Anak Laki-laki</label>
+          <select id="anak-laki">
+            <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option>
+          </select>
+        </div>
+        <div>
+          <label>Jumlah Anak Perempuan</label>
+          <select id="anak-perempuan">
+            <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:18px;">
+      <label style="font-size:14px;color:var(--green-deep);font-weight:600;margin-bottom:10px;display:block;">▸ Orang Tua</label>
+      <div class="checkbox-group">
+        <label class="checkbox-item"><input type="checkbox" id="ayah"> Ayah</label>
+        <label class="checkbox-item"><input type="checkbox" id="ibu"> Ibu</label>
+      </div>
+    </div>
+
+    <div style="margin-bottom:18px;">
+      <label style="font-size:14px;color:var(--green-deep);font-weight:600;margin-bottom:10px;display:block;">▸ Saudara Kandung</label>
+      <div class="form-grid">
+        <div>
+          <label>Saudara Laki-laki Kandung</label>
+          <select id="sdr-laki">
+            <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option>
+          </select>
+        </div>
+        <div>
+          <label>Saudara Perempuan Kandung</label>
+          <select id="sdr-perempuan">
+            <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:18px;">
+      <label style="font-size:14px;color:var(--green-deep);font-weight:600;margin-bottom:10px;display:block;">▸ Cucu (dari Anak Laki-laki)</label>
+      <div class="form-grid">
+        <div>
+          <label>Cucu Laki-laki (anak dari anak laki)</label>
+          <select id="cucu-laki">
+            <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option>
+          </select>
+        </div>
+        <div>
+          <label>Cucu Perempuan (anak dari anak laki)</label>
+          <select id="cucu-perempuan">
+            <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:18px;">
+      <label style="font-size:14px;color:var(--green-deep);font-weight:600;margin-bottom:10px;display:block;">▸ Kakek & Nenek</label>
+      <div class="checkbox-group">
+        <label class="checkbox-item"><input type="checkbox" id="kakek"> Kakek (dari Ayah)</label>
+        <label class="checkbox-item"><input type="checkbox" id="nenek"> Nenek (dari Ibu)</label>
+      </div>
+    </div>
+
+    <div>
+      <label style="font-size:14px;color:var(--green-deep);font-weight:600;margin-bottom:10px;display:block;">▸ Saudara Seayah</label>
+      <div class="form-grid">
+        <div>
+          <label>Saudara Laki-laki Seayah</label>
+          <select id="sdr-laki-ayah">
+            <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option>
+          </select>
+        </div>
+        <div>
+          <label>Saudara Perempuan Seayah</label>
+          <select id="sdr-perempuan-ayah">
+            <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-primary" onclick="hitungWaris()">⚖️ Hitung Pembagian Waris</button>
+  <button class="btn-reset" onclick="resetWaris()">↺ Reset</button>
+
+  <div id="faraidh-result" style="margin-top:28px;">
+    <div class="result-box">
+      <div class="result-title">Harta Bersih yang Dibagikan</div>
+      <div class="result-harta-pokok" id="res-harta-bersih">Rp 0</div>
+      <div class="result-sub" id="res-info-harta"></div>
+    </div>
+
+    <div id="res-special-info"></div>
+
+    <div id="res-ahli-grid" class="ahli-grid"></div>
+
+    <div class="diagram-container">
+      <div class="diagram-title">Diagram Ahli Waris</div>
+      <div id="family-tree"></div>
+      <div style="display:flex;gap:16px;justify-content:center;margin-top:12px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-light);">
+          <div style="width:16px;height:16px;background:var(--green-mist);border:2px solid var(--green-mid);border-radius:4px;"></div> Mendapat Bagian
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-light);">
+          <div style="width:16px;height:16px;background:#ffe8e8;border:2px dashed #e08080;border-radius:4px;"></div> Terhijab (Gugur)
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-light);">
+          <div style="width:16px;height:16px;background:var(--green-deep);border:2px solid var(--gold);border-radius:4px;"></div> Pewaris (Almarhum)
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:8px;">
+      <div class="card-title"><div class="icon">📋</div> Penjelasan Pembagian</div>
+      <div id="res-penjelasan" style="font-size:14.5px;line-height:1.8;color:var(--text-mid);"></div>
+    </div>
+  </div>
+</div>
+
+<div id="page-zakat" class="page">
+  <div class="section-header">
+    <h2>Kalkulator Zakat</h2>
+    <div class="divider"><div class="divider-line"></div><div class="divider-gem">✦</div><div class="divider-line"></div></div>
+    <p>Hitung zakat Anda sesuai ketentuan syariat Islam</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🌙</div> Pilih Jenis Zakat</div>
+    <div class="zakat-type-grid">
+      <div class="zakat-type-btn active" onclick="selectZakat('maal')">
+        <div class="zt-icon">💎</div>
+        <div class="zt-name">Zakat Maal</div>
+      </div>
+      <div class="zakat-type-btn" onclick="selectZakat('penghasilan')">
+        <div class="zt-icon">💼</div>
+        <div class="zt-name">Zakat Penghasilan</div>
+      </div>
+      <div class="zakat-type-btn" onclick="selectZakat('fitrah')">
+        <div class="zt-icon">🌾</div>
+        <div class="zt-name">Zakat Fitrah</div>
+      </div>
+      <div class="zakat-type-btn" onclick="selectZakat('emas')">
+        <div class="zt-icon">🥇</div>
+        <div class="zt-name">Zakat Emas/Perak</div>
+      </div>
+      <div class="zakat-type-btn" onclick="selectZakat('perdagangan')">
+        <div class="zt-icon">🏪</div>
+        <div class="zt-name">Zakat Perdagangan</div>
+      </div>
+      <div class="zakat-type-btn" onclick="selectZakat('pertanian')">
+        <div class="zt-icon">🌾</div>
+        <div class="zt-name">Zakat Pertanian</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="zakat-form-section active card" id="form-maal">
+    <div class="card-title"><div class="icon">💎</div> Zakat Maal (Harta Simpanan)</div>
+    <div style="background:var(--green-whisper);border-radius:10px;padding:14px;margin-bottom:18px;font-size:13.5px;color:var(--text-mid);line-height:1.7;">
+      <strong style="color:var(--green-deep);">Syarat:</strong> Harta mencapai nisab (setara 85 gram emas) dan tersimpan selama 1 tahun penuh (haul). Kadar zakat: <strong>2,5%</strong>
+    </div>
+    <div class="form-grid">
+      <div>
+        <label>Uang Tunai & Tabungan (Rp)</label>
+        <input type="number" id="maal-tunai" placeholder="0" min="0" value="0">
+      </div>
+      <div>
+        <label>Deposito / Investasi (Rp)</label>
+        <input type="number" id="maal-deposito" placeholder="0" min="0" value="0">
+      </div>
+      <div>
+        <label>Piutang yang Bisa Ditagih (Rp)</label>
+        <input type="number" id="maal-piutang" placeholder="0" min="0" value="0">
+      </div>
+      <div>
+        <label>Harga Emas per Gram (Rp)</label>
+        <input type="number" id="maal-harga-emas" placeholder="1200000" min="0" value="1200000">
+      </div>
+    </div>
+    <button class="btn-primary" onclick="hitungZakatMaal()">🌙 Hitung Zakat Maal</button>
+  </div>
+
+  <div class="zakat-form-section card" id="form-penghasilan">
+    <div class="card-title"><div class="icon">💼</div> Zakat Penghasilan (Profesi)</div>
+    <div style="background:var(--green-whisper);border-radius:10px;padding:14px;margin-bottom:18px;font-size:13.5px;color:var(--text-mid);line-height:1.7;">
+      <strong style="color:var(--green-deep);">Ketentuan:</strong> Nisab bisa disamakan dengan pertanian (520 kg beras) atau emas (85gr/tahun). Kadar zakat: <strong>2,5%</strong> dari penghasilan bruto per bulan.
+    </div>
+    <div class="form-grid">
+      <div>
+        <label>Penghasilan Bruto per Bulan (Rp)</label>
+        <input type="number" id="peng-bruto" placeholder="0" min="0" value="0">
+      </div>
+      <div>
+        <label>Penghasilan Lain per Bulan (Rp)</label>
+        <input type="number" id="peng-lain" placeholder="0" min="0" value="0">
+      </div>
+      <div>
+        <label>Standar Nisab</label>
+        <select id="peng-nisab-jenis">
+          <option value="pertanian">Pertanian (520 kg Beras)</option>
+          <option value="emas">Emas (85 gram Emas / Tahun)</option>
+        </select>
+      </div>
+      <div>
+        <label>Harga Beras per Kg (Rp)</label>
+        <input type="number" id="peng-harga-beras" placeholder="12000" min="0" value="12000">
+      </div>
+      <div>
+        <label>Harga Emas per Gram (Rp)</label>
+        <input type="number" id="peng-harga-emas" placeholder="1200000" min="0" value="1200000">
+      </div>
+    </div>
+    <button class="btn-primary" onclick="hitungZakatPenghasilan()">🌙 Hitung Zakat Penghasilan</button>
+  </div>
+
+  <div class="zakat-form-section card" id="form-fitrah">
+    <div class="card-title"><div class="icon">🌾</div> Zakat Fitrah</div>
+    <div style="background:var(--green-whisper);border-radius:10px;padding:14px;margin-bottom:18px;font-size:13.5px;color:var(--text-mid);line-height:1.7;">
+      <strong style="color:var(--green-deep);">Ketentuan:</strong> Wajib bagi setiap jiwa Muslim. Besar: <strong>2,5 kg</strong> (1 sha') beras/makanan pokok atau nilai uangnya. Dibayar sebelum Shalat Idul Fitri.
+    </div>
+    <div class="form-grid">
+      <div>
+        <label>Jumlah Jiwa yang Ditanggung</label>
+        <input type="number" id="fitrah-jiwa" placeholder="1" min="1" value="1">
+      </div>
+      <div>
+        <label>Harga Beras per Kg (Rp)</label>
+        <input type="number" id="fitrah-harga-beras" placeholder="15000" min="0" value="15000">
+      </div>
+    </div>
+    <button class="btn-primary" onclick="hitungZakatFitrah()">🌙 Hitung Zakat Fitrah</button>
+  </div>
+
+  <div class="zakat-form-section card" id="form-emas">
+    <div class="card-title"><div class="icon">🥇</div> Zakat Emas & Perak</div>
+    <div style="background:var(--green-whisper);border-radius:10px;padding:14px;margin-bottom:18px;font-size:13.5px;color:var(--text-mid);line-height:1.7;">
+      <strong style="color:var(--green-deep);">Nisab Emas:</strong> 85 gram. <strong>Nisab Perak:</strong> 595 gram. Kadar zakat: <strong>2,5%</strong>. Syarat: tersimpan 1 tahun (haul).
+    </div>
+    <div class="form-grid">
+      <div>
+        <label>Jumlah Emas yang Dimiliki (gram)</label>
+        <input type="number" id="emas-gram" placeholder="0" min="0" value="0">
+      </div>
+      <div>
+        <label>Harga Emas per Gram (Rp)</label>
+        <input type="number" id="emas-harga" placeholder="1200000" min="0" value="1200000">
+      </div>
+      <div>
+        <label>Jumlah Perak yang Dimiliki (gram)</label>
+        <input type="number" id="perak-gram" placeholder="0" min="0" value="0">
+      </div>
+      <div>
+        <label>Harga Perak per Gram (Rp)</label>
+        <input type="number" id="perak-harga" placeholder="15000" min="0" value="15000">
+      </div>
+    </div>
+    <button class="btn-primary" onclick="hitungZakatEmas()">🌙 Hitung Zakat Emas</button>
+  </div>
+
+  <div class="zakat-form-section card" id="form-perdagangan">
+    <div class="card-title"><div class="icon">🏪</div> Zakat Perdagangan (Tijarah)</div>
+    <div style="background:var(--green-whisper);border-radius:10px;padding:14px;margin-bottom:18px;font-size:13.5px;color:var(--text-mid);line-height:1.7;">
+      <strong style="color:var(--green-deep);">Ketentuan:</strong> Nisab = 85 gram emas. Kadar zakat: <strong>2,5%</strong> dari (Aset Lancar + Piutang − Hutang Jangka Pendek) setelah 1 tahun.
+    </div>
+    <div class="form-grid">
+      <div>
+        <label>Nilai Stok Barang Dagangan (Rp)</label>
+        <input type="number" id="dag-stok" placeholder="0" min="0" value="0">
+      </div>
+      <div>
+        <label>Kas & Setara Kas (Rp)</label>
+        <input type="number" id="dag-kas" placeholder="0" min="0" value="0">
+      </div>
+      <div>
+        <label>Piutang Dagang (Rp)</label>
+        <input type="number" id="dag-piutang" placeholder="0" min="0" value="0">
+      </div>
+      <div>
+        <label>Hutang Jangka Pendek (Rp)</label>
+        <input type="number" id="dag-hutang" placeholder="0" min="0" value="0">
+      </div>
+      <div>
+        <label>Harga Emas per Gram (Rp)</label>
+        <input type="number" id="dag-harga-emas" placeholder="1200000" min="0" value="1200000">
+      </div>
+    </div>
+    <button class="btn-primary" onclick="hitungZakatDagang()">🌙 Hitung Zakat Perdagangan</button>
+  </div>
+
+  <div class="zakat-form-section card" id="form-pertanian">
+    <div class="card-title"><div class="icon">🌾</div> Zakat Pertanian (Zira'ah)</div>
+    <div style="background:var(--green-whisper);border-radius:10px;padding:14px;margin-bottom:18px;font-size:13.5px;color:var(--text-mid);line-height:1.7;">
+      <strong style="color:var(--green-deep);">Nisab:</strong> 653 kg gabah. Kadar: <strong>10%</strong> jika tadah hujan, <strong>5%</strong> jika dengan irigasi/pompa. Tidak ada syarat haul (dikeluarkan tiap panen).
+    </div>
+    <div class="form-grid">
+      <div>
+        <label>Total Hasil Panen (kg)</label>
+        <input type="number" id="tani-hasil" placeholder="0" min="0" value="0">
+      </div>
+      <div>
+        <label>Jenis Pengairan</label>
+        <select id="tani-pengairan">
+          <option value="hujan">Tadah Hujan (10%)</option>
+          <option value="irigasi">Irigasi / Pompa (5%)</option>
+        </select>
+      </div>
+      <div>
+        <label>Harga Gabah per Kg (Rp)</label>
+        <input type="number" id="tani-harga" placeholder="5000" min="0" value="5000">
+      </div>
+    </div>
+    <button class="btn-primary" onclick="hitungZakatTani()">🌙 Hitung Zakat Pertanian</button>
+  </div>
+
+  <div id="zakat-result" style="margin-top:24px;" class="card">
+    <div class="card-title"><div class="icon">📊</div> Hasil Perhitungan</div>
+    <div id="zakat-result-inner"></div>
+  </div>
+</div>
+
+<div id="page-glosarium" class="page">
+  <div class="section-header">
+    <h2>Glosarium Islam</h2>
+    <div class="divider"><div class="divider-line"></div><div class="divider-gem">✦</div><div class="divider-line"></div></div>
+    <p>Istilah-istilah penting dalam Ilmu Faraidh & Zakat</p>
+  </div>
+
+  <div class="search-box">
+    <input type="text" id="glos-search" placeholder="Cari istilah..." oninput="filterGlosarium()">
+  </div>
+
+  <div class="glos-tabs">
+    <button class="glos-tab active" onclick="filterTab('semua')">Semua</button>
+    <button class="glos-tab" onclick="filterTab('waris')">⚖️ Faraidh / Waris</button>
+    <button class="glos-tab" onclick="filterTab('zakat')">🌙 Zakat</button>
+  </div>
+
+  <div id="glos-container"></div>
+</div>
+
+</main>
+
+<footer>
+  <div class="footer-quote">"Pelajarilah ilmu faraidh dan ajarkanlah ia, karena sesungguhnya ia adalah setengah ilmu." — HR. Ibnu Majah</div>
+  <div>Kalkulator ini bersifat edukatif. Untuk kasus kompleks, konsultasikan dengan ulama atau lembaga fatwa setempat.</div>
+  <div style="margin-top:8px;opacity:0.6;">© 2025 Mirath & Zakat · Untuk Para Penyuluh Agama Islam Indonesia</div>
+</footer>
+
+<script>
+// ===================================================
+// NAVIGATION
+// ===================================================
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ===================================================
+// UTILITY
+// ===================================================
+function fmt(n) {
+  return 'Rp ' + Math.round(n).toLocaleString('id-ID');
+}
+function fmtFraksi(n, d) {
+  if (n === 0) return '0';
+  const gcd = (a,b) => b ? gcd(b, a%b) : a;
+  const g = gcd(n, d);
+  return n/g + '/' + d/g;
+}
+function getVal(id) { return parseFloat(document.getElementById(id).value) || 0; }
+function getChk(id) { return document.getElementById(id).checked; }
+
+// ===================================================
+// FARAIDH ENGINE
+// ===================================================
+function hitungWaris() {
+  const totalHarta = getVal('total-harta');
+  if (!totalHarta || totalHarta <= 0) {
+    alert('Masukkan jumlah harta warisan terlebih dahulu.');
+    return;
+  }
+
+  const hutang = getVal('hutang');
+  const wasiat = getVal('wasiat');
+  const pemakaman = getVal('biaya-pemakaman');
+  const jenisMayyit = document.getElementById('jenis-mayyit').value;
+
+  // Harta bersih
+  const hartaBersih = Math.max(0, totalHarta - pemakaman - hutang);
+  const batasWasiat = hartaBersih / 3;
+  const wasiatEfektif = Math.min(wasiat, batasWasiat);
+  const hartaDibagi = Math.max(0, hartaBersih - wasiatEfektif);
+
+  // Ahli waris input
+  const adaSuami = getChk('suami') && jenisMayyit === 'perempuan';
+  // UPDATE: Tangkap value dari select dropdown Istri
+  const jumlahIstri = getVal('istri'); 
+  const adaIstri = jumlahIstri > 0 && jenisMayyit === 'laki';
+  
+  const anakLaki = getVal('anak-laki');
+  const anakPerempuan = getVal('anak-perempuan');
+  const adaAyah = getChk('ayah');
+  const adaIbu = getChk('ibu');
+  const sdrLaki = getVal('sdr-laki');
+  const sdrPerempuan = getVal('sdr-perempuan');
+  const cucuLaki = getVal('cucu-laki');
+  const cucuPerempuan = getVal('cucu-perempuan');
+  const adaKakek = getChk('kakek');
+  const adaNenek = getChk('nenek');
+  const sdrLakiAyah = getVal('sdr-laki-ayah');
+  const sdrPerempuanAyah = getVal('sdr-perempuan-ayah');
+
+  const adaAnakLaki = anakLaki > 0;
+  const adaAnakPerempuan = anakPerempuan > 0;
+  const adaAnak = adaAnakLaki || adaAnakPerempuan;
+  const adaCucuLaki = cucuLaki > 0;
+  const adaCucuPerempuan = cucuPerempuan > 0;
+  const adaCucu = adaCucuLaki || adaCucuPerempuan;
+  const adaSdrLaki = sdrLaki > 0;
+  const adaSdrPerempuan = sdrPerempuan > 0;
+  const adaSdr = adaSdrLaki || adaSdrPerempuan;
+
+  let ahliWaris = []; // {nama, bagian_penyebut [num,den], nominal, hajb, alasan_hajb, jenis}
+  let penjelasan = [];
+  let aul = false, radd = false, ummariyatayn = false;
+
+  // Hijab rules
+  const hajbSdrOlehAnak = adaAnakLaki || adaCucuLaki || adaAyah;
+  const hajbCucuOlehAnakLaki = adaAnakLaki;
+  const hajbKakekOlehAyah = adaAyah;
+  const hajbNenekOlehIbu = adaIbu;
+  const hajbSdrAyahOlehSdrKandung = adaSdrLaki || adaAnakLaki || adaAyah || adaCucuLaki;
+
+  let ahli = [];
+
+  // SUAMI
+  if (adaSuami) {
+    let fardh, alasan;
+    if (adaAnak || adaCucu) { fardh = [1,4]; alasan = 'Suami mendapat 1/4 karena pewaris meninggalkan anak/cucu.'; }
+    else { fardh = [1,2]; alasan = 'Suami mendapat 1/2 karena tidak ada anak/cucu.'; }
+    ahli.push({id:'suami', nama:'Suami', jumlah:1, hajb:false, alasan_hajb:'', fardh, ashobah:false, alasan});
+  }
+  // ISTRI (UPDATE: Logika jika istri lebih dari 1)
+  if (adaIstri) {
+    let fardh, alasan;
+    if (adaAnak || adaCucu) { fardh = [1,8]; alasan = jumlahIstri > 1 ? `Istri (${jumlahIstri} org) berbagi 1/8 karena pewaris meninggalkan anak/cucu.` : 'Istri mendapat 1/8 karena pewaris meninggalkan anak/cucu.'; }
+    else { fardh = [1,4]; alasan = jumlahIstri > 1 ? `Istri (${jumlahIstri} org) berbagi 1/4 karena tidak ada anak/cucu.` : 'Istri mendapat 1/4 karena tidak ada anak/cucu.'; }
+    ahli.push({id:'istri', nama:'Istri', jumlah:jumlahIstri, hajb:false, alasan_hajb:'', fardh, ashobah:false, alasan});
+  }
+  // ANAK LAKI-LAKI
+  if (adaAnakLaki) {
+    ahli.push({id:'anak-laki', nama:'Anak Laki-laki', jumlah:anakLaki, hajb:false, alasan_hajb:'', fardh:null, ashobah:true, alasan:'Anak laki-laki adalah ashobah binafsi, mewarisi sisa harta setelah ashabul furudh.'});
+  }
+  // ANAK PEREMPUAN
+  if (adaAnakPerempuan) {
+    if (adaAnakLaki) {
+      ahli.push({id:'anak-perempuan', nama:'Anak Perempuan', jumlah:anakPerempuan, hajb:false, alasan_hajb:'', fardh:null, ashobah:true, ashobahBersama:'anak-laki', alasan:'Anak perempuan menjadi ashobah bil ghair (bersama anak laki-laki) dengan bagian 1:2.'});
+    } else {
+      let fardh, alasan;
+      if (anakPerempuan === 1) { fardh = [1,2]; alasan = 'Anak perempuan tunggal mendapat 1/2.'; }
+      else { fardh = [2,3]; alasan = `${anakPerempuan} anak perempuan (tanpa anak laki) mendapat 2/3 dibagi rata.`; }
+      ahli.push({id:'anak-perempuan', nama:'Anak Perempuan', jumlah:anakPerempuan, hajb:false, alasan_hajb:'', fardh, ashobah:false, alasan});
+    }
+  }
+  // CUCU (dari anak laki)
+  if (adaCucuLaki && !adaAnakLaki) {
+    ahli.push({id:'cucu-laki', nama:'Cucu Laki-laki (dr Anak Laki)', jumlah:cucuLaki, hajb:hajbCucuOlehAnakLaki, alasan_hajb:'Terhijab oleh Anak Laki-laki', fardh:null, ashobah:true, alasan:'Cucu laki-laki menggantikan posisi anak laki-laki bila tidak ada.'});
+  } else if (adaCucuLaki && hajbCucuOlehAnakLaki) {
+    ahli.push({id:'cucu-laki', nama:'Cucu Laki-laki (dr Anak Laki)', jumlah:cucuLaki, hajb:true, alasan_hajb:'Terhijab oleh Anak Laki-laki', fardh:null, ashobah:false, alasan:''});
+  }
+  if (adaCucuPerempuan) {
+    if (adaAnakLaki) {
+      ahli.push({id:'cucu-perempuan', nama:'Cucu Perempuan (dr Anak Laki)', jumlah:cucuPerempuan, hajb:true, alasan_hajb:'Terhijab oleh Anak Laki-laki', fardh:null, ashobah:false, alasan:''});
+    } else if (adaCucuLaki) {
+      ahli.push({id:'cucu-perempuan', nama:'Cucu Perempuan (dr Anak Laki)', jumlah:cucuPerempuan, hajb:false, alasan_hajb:'', fardh:null, ashobah:true, ashobahBersama:'cucu-laki', alasan:'Cucu perempuan ashobah bil ghair bersama cucu laki.'});
+    } else if (adaAnakPerempuan) {
+      if (anakPerempuan === 1) {
+        ahli.push({id:'cucu-perempuan', nama:'Cucu Perempuan (dr Anak Laki)', jumlah:cucuPerempuan, hajb:false, alasan_hajb:'', fardh:[1,6], ashobah:false, alasan:'Cucu perempuan mendapat 1/6 sebagai pelengkap 2/3 (bersama 1 anak perempuan yang mendapat 1/2).'});
+      } else {
+        ahli.push({id:'cucu-perempuan', nama:'Cucu Perempuan (dr Anak Laki)', jumlah:cucuPerempuan, hajb:true, alasan_hajb:'Terhijab karena anak perempuan sudah mencapai batas 2/3', fardh:null, ashobah:false, alasan:''});
+      }
+    } else {
+      if (cucuPerempuan === 1) {
+        ahli.push({id:'cucu-perempuan', nama:'Cucu Perempuan (dr Anak Laki)', jumlah:cucuPerempuan, hajb:false, alasan_hajb:'', fardh:[1,2], ashobah:false, alasan:'Cucu perempuan tunggal mendapat 1/2.'});
+      } else {
+        ahli.push({id:'cucu-perempuan', nama:'Cucu Perempuan (dr Anak Laki)', jumlah:cucuPerempuan, hajb:false, alasan_hajb:'', fardh:[2,3], ashobah:false, alasan:`${cucuPerempuan} cucu perempuan (tanpa anak laki/cucu laki) mendapat 2/3.`});
+      }
+    }
+  }
+  // AYAH
+  if (adaAyah) {
+    if (adaAnak || adaCucu) {
+      ahli.push({id:'ayah', nama:'Ayah', jumlah:1, hajb:false, alasan_hajb:'', fardh:[1,6], ashobah:false, alasan:'Ayah mendapat 1/6 karena ada anak/cucu.'});
+    } else {
+      if (adaAnakPerempuan && !adaAnakLaki) {
+        ahli.push({id:'ayah', nama:'Ayah', jumlah:1, hajb:false, alasan_hajb:'', fardh:[1,6], ashobah:true, alasan:'Ayah mendapat 1/6 (fardh) ditambah sisa harta (ashobah) karena ada anak perempuan tanpa anak laki.'});
+      } else {
+        ahli.push({id:'ayah', nama:'Ayah', jumlah:1, hajb:false, alasan_hajb:'', fardh:null, ashobah:true, alasan:'Ayah ashobah binafsi, mewarisi sisa harta setelah ashabul furudh karena tidak ada anak/cucu.'});
+      }
+    }
+  }
+  // IBU
+  if (adaIbu) {
+    let fardh, alasan;
+    const banyakSdr = sdrLaki + sdrPerempuan + sdrLakiAyah + sdrPerempuanAyah;
+    if (adaAnak || adaCucu || banyakSdr >= 2) {
+      fardh = [1,6]; alasan = 'Ibu mendapat 1/6 karena ada anak/cucu atau 2+ saudara.';
+    } else {
+      fardh = [1,3]; alasan = 'Ibu mendapat 1/3 karena tidak ada anak/cucu dan saudara kurang dari 2.';
+      if ((adaSuami || adaIstri) && adaAyah && !adaAnak && !adaCucu) {
+        ummariyatayn = true;
+      }
+    }
+    ahli.push({id:'ibu', nama:'Ibu', jumlah:1, hajb:false, alasan_hajb:'', fardh, ashobah:false, alasan});
+  }
+  // KAKEK
+  if (adaKakek) {
+    if (adaAyah) {
+      ahli.push({id:'kakek', nama:'Kakek (dr Ayah)', jumlah:1, hajb:true, alasan_hajb:'Terhijab oleh Ayah', fardh:null, ashobah:false, alasan:''});
+    } else {
+      if (adaAnak || adaCucu) {
+        ahli.push({id:'kakek', nama:'Kakek (dr Ayah)', jumlah:1, hajb:false, alasan_hajb:'', fardh:[1,6], ashobah:false, alasan:'Kakek mendapat 1/6 menggantikan posisi ayah karena ada anak/cucu.'});
+      } else {
+        if (adaAnakPerempuan && !adaAnakLaki) {
+          ahli.push({id:'kakek', nama:'Kakek (dr Ayah)', jumlah:1, hajb:false, alasan_hajb:'', fardh:[1,6], ashobah:true, alasan:'Kakek mendapat 1/6 + sisa (menggantikan ayah).'});
+        } else {
+          ahli.push({id:'kakek', nama:'Kakek (dr Ayah)', jumlah:1, hajb:false, alasan_hajb:'', fardh:null, ashobah:true, alasan:'Kakek ashobah menggantikan ayah.'});
+        }
+      }
+    }
+  }
+  // NENEK
+  if (adaNenek) {
+    if (adaIbu) {
+      ahli.push({id:'nenek', nama:'Nenek (dr Ibu)', jumlah:1, hajb:true, alasan_hajb:'Terhijab oleh Ibu', fardh:null, ashobah:false, alasan:''});
+    } else {
+      ahli.push({id:'nenek', nama:'Nenek (dr Ibu)', jumlah:1, hajb:false, alasan_hajb:'', fardh:[1,6], ashobah:false, alasan:'Nenek mendapat 1/6 menggantikan posisi ibu.'});
+    }
+  }
+  // SAUDARA KANDUNG
+  const adaHijabSdr = adaAnakLaki || adaCucuLaki || adaAyah || (adaKakek && !adaAyah);
+  if (adaSdrLaki) {
+    if (adaHijabSdr) {
+      ahli.push({id:'sdr-laki', nama:'Saudara Laki Kandung', jumlah:sdrLaki, hajb:true, alasan_hajb:'Terhijab oleh Anak Laki/Cucu Laki/Ayah/Kakek', fardh:null, ashobah:false, alasan:''});
+    } else {
+      ahli.push({id:'sdr-laki', nama:'Saudara Laki Kandung', jumlah:sdrLaki, hajb:false, alasan_hajb:'', fardh:null, ashobah:true, alasan:'Saudara laki kandung ashobah binafsi.'});
+    }
+  }
+  if (adaSdrPerempuan) {
+    if (adaHijabSdr) {
+      ahli.push({id:'sdr-perempuan', nama:'Saudara Perempuan Kandung', jumlah:sdrPerempuan, hajb:true, alasan_hajb:'Terhijab oleh Anak Laki/Cucu Laki/Ayah/Kakek', fardh:null, ashobah:false, alasan:''});
+    } else if (adaSdrLaki) {
+      ahli.push({id:'sdr-perempuan', nama:'Saudara Perempuan Kandung', jumlah:sdrPerempuan, hajb:false, alasan_hajb:'', fardh:null, ashobah:true, ashobahBersama:'sdr-laki', alasan:'Saudara perempuan ashobah bil ghair bersama saudara laki kandung (1:2).'});
+    } else if (adaAnakPerempuan || adaCucuPerempuan) {
+      ahli.push({id:'sdr-perempuan', nama:'Saudara Perempuan Kandung', jumlah:sdrPerempuan, hajb:false, alasan_hajb:'', fardh:null, ashobah:true, alasan:'Saudara perempuan menjadi ashobah ma\'al ghair bersama anak/cucu perempuan.'});
+    } else {
+      let fardh, alasan2;
+      if (sdrPerempuan === 1) { fardh = [1,2]; alasan2 = 'Saudara perempuan kandung tunggal mendapat 1/2.'; }
+      else { fardh = [2,3]; alasan2 = `${sdrPerempuan} saudara perempuan kandung mendapat 2/3.`; }
+      ahli.push({id:'sdr-perempuan', nama:'Saudara Perempuan Kandung', jumlah:sdrPerempuan, hajb:false, alasan_hajb:'', fardh, ashobah:false, alasan:alasan2});
+    }
+  }
+  // SAUDARA SEAYAH
+  const adaHijabSdrAyah = adaAnakLaki || adaCucuLaki || adaAyah || (adaKakek && !adaAyah) || adaSdrLaki || (adaSdrPerempuan && !adaAnakPerempuan && !adaCucuPerempuan);
+  if (sdrLakiAyah > 0) {
+    if (adaHijabSdrAyah) {
+      ahli.push({id:'sdr-laki-ayah', nama:'Saudara Laki Seayah', jumlah:sdrLakiAyah, hajb:true, alasan_hajb:'Terhijab oleh Saudara Kandung/Anak Laki/Ayah', fardh:null, ashobah:false, alasan:''});
+    } else {
+      ahli.push({id:'sdr-laki-ayah', nama:'Saudara Laki Seayah', jumlah:sdrLakiAyah, hajb:false, alasan_hajb:'', fardh:null, ashobah:true, alasan:'Saudara laki seayah ashobah (bila tidak ada saudara kandung).'});
+    }
+  }
+  if (sdrPerempuanAyah > 0) {
+    if (adaHijabSdrAyah) {
+      ahli.push({id:'sdr-perempuan-ayah', nama:'Saudara Perempuan Seayah', jumlah:sdrPerempuanAyah, hajb:true, alasan_hajb:'Terhijab oleh Saudara Kandung/Anak Laki/Ayah', fardh:null, ashobah:false, alasan:''});
+    } else if (sdrLakiAyah > 0) {
+      ahli.push({id:'sdr-perempuan-ayah', nama:'Saudara Perempuan Seayah', jumlah:sdrPerempuanAyah, hajb:false, alasan_hajb:'', fardh:null, ashobah:true, ashobahBersama:'sdr-laki-ayah', alasan:'Ashobah bil ghair bersama saudara laki seayah (1:2).'});
+    } else {
+      let fardh2;
+      if (sdrPerempuanAyah === 1) fardh2 = [1,2]; else fardh2 = [2,3];
+      ahli.push({id:'sdr-perempuan-ayah', nama:'Saudara Perempuan Seayah', jumlah:sdrPerempuanAyah, hajb:false, alasan_hajb:'', fardh:fardh2, ashobah:false, alasan:'Saudara perempuan seayah mendapat fardh.'});
+    }
+  }
+
+  // ============ HITUNG NOMINAL ============
+  let penyebutBersama = 1;
+  let ahliAktif = ahli.filter(a => !a.hajb);
+  
+  function lcm(a, b) { return a * b / gcd(a, b); }
+  function gcd(a, b) { return b ? gcd(b, a%b) : a; }
+  
+  let penyebuts = ahliAktif.filter(a => a.fardh).map(a => a.fardh[1]);
+  if (penyebuts.length > 0) {
+    penyebutBersama = penyebuts.reduce(lcm, 1);
+  }
+
+  ahliAktif.forEach(a => {
+    if (a.fardh) {
+      a.pembilangAsli = a.fardh[0] * (penyebutBersama / a.fardh[1]);
+    } else {
+      a.pembilangAsli = 0;
+    }
+  });
+
+  let totalFardh = ahliAktif.filter(a=>a.fardh).reduce((s,a) => s + a.pembilangAsli, 0);
+  let sisaUntukAshobah = penyebutBersama - totalFardh;
+
+  let infoUmmariyatayn = '';
+  if (ummariyatayn) {
+    const ibuObj = ahliAktif.find(a => a.id === 'ibu');
+    const ayahObj = ahliAktif.find(a => a.id === 'ayah');
+    const pasanganObj = ahliAktif.find(a => a.id === 'suami' || a.id === 'istri');
+    if (ibuObj && ayahObj && pasanganObj) {
+      const bagianPasangan = pasanganObj.fardh ? pasanganObj.fardh[0] / pasanganObj.fardh[1] : 0;
+      const sisaSetelahPasangan = 1 - bagianPasangan;
+      const bagianIbu = sisaSetelahPasangan / 3;
+      const bagianAyah = sisaSetelahPasangan * 2 / 3;
+      ibuObj.fardh_override = bagianIbu;
+      ayahObj.fardh_override = bagianAyah;
+      ayahObj.ashobah = false;
+      infoUmmariyatayn = `Kasus <strong>Ummariyatayn (Gharrawayn)</strong>: Ibu mendapat 1/3 dari sisa harta setelah bagian ${pasanganObj.nama}, yaitu 1/3 × ${((1 - bagianPasangan)*100).toFixed(0)}% = ${(bagianIbu*100).toFixed(2)}%. Ayah mendapat sisanya ${(bagianAyah*100).toFixed(2)}%.`;
+    }
+  }
+
+  // UPDATE 5: Koreksi Unit Ashobah (2:1 untuk Anak/Cucu/Saudara)
+  let ashobahList = ahliAktif.filter(a => a.ashobah && !a.ashobahBersama);
+  let ashobahBersamaList = ahliAktif.filter(a => a.ashobah && a.ashobahBersama);
+  
+  let totalUnitAshobah = 0;
+  ashobahList.forEach(a => {
+    // Memastikan laki-laki (anak, cucu, dan SAUDARA laki) dihitung 2 unit
+    if ['anak-laki', 'cucu-laki', 'sdr-laki', 'sdr-laki-ayah'].includes(a.id)) {
+      totalUnitAshobah += a.jumlah * 2;
+    } else {
+      totalUnitAshobah += a.jumlah;
+    }
+  });
+  ahliAktif.filter(a => a.ashobahBersama).forEach(a => {
+    totalUnitAshobah += a.jumlah * 1; 
+  });
+
+  let hasilAhli = [];
+
+  ahli.forEach(a => {
+    let nominal = 0, fraksiStr = '';
+    if (a.hajb) {
+      hasilAhli.push({...a, nominal:0, fraksiStr:'Gugur (Mahjub)', bagianDesimal:0});
+      return;
+    }
+    
+    if (a.fardh_override !== undefined) {
+      nominal = hartaDibagi * a.fardh_override;
+      fraksiStr = (a.fardh_override * 100).toFixed(2) + '%';
+    } else if (a.fardh) {
+      const desimal = a.fardh[0] / a.fardh[1];
+      nominal = hartaDibagi * desimal;
+      if (a.jumlah > 1) {
+        fraksiStr = fmtFraksi(a.fardh[0], a.fardh[1]) + ' (dibagi ' + a.jumlah + ')';
+      } else {
+        fraksiStr = fmtFraksi(a.fardh[0], a.fardh[1]);
+      }
+    } else if (a.ashobah) {
+      if (sisaUntukAshobah <= 0 && !ummariyatayn) {
+        fraksiStr = 'Ashobah (sisa)';
+        nominal = 0;
+      } else {
+        let unit;
+        // Koreksi unit individu ashobah
+        if (['anak-laki', 'cucu-laki', 'sdr-laki', 'sdr-laki-ayah'].includes(a.id)) {
+            unit = a.jumlah * 2;
+        } else {
+            unit = a.jumlah;
+        }
+        
+        const sisaNominal = hartaDibagi * (sisaUntukAshobah / penyebutBersama);
+        if (totalUnitAshobah > 0) {
+          nominal = (sisaNominal * unit) / totalUnitAshobah;
+          fraksiStr = 'Ashobah ' + unit + '/' + totalUnitAshobah + ' dari sisa';
+        } else {
+          nominal = sisaNominal;
+          fraksiStr = 'Ashobah (semua sisa)';
+        }
+        if (a.id === 'ayah' && a.fardh) {
+          const faradhAyah = hartaDibagi / 6;
+          const sisaTotal = hartaDibagi * Math.max(0, (penyebutBersama - totalFardh) / penyebutBersama);
+          nominal = faradhAyah + sisaTotal;
+          fraksiStr = '1/6 + sisa harta';
+        }
+      }
+    }
+
+    if (a.ashobahBersama) {
+      const pasangan = ahli.find(x => x.id === a.ashobahBersama);
+      if (pasangan && !pasangan.hajb) {
+        let unitLaki = pasangan.jumlah * 2;
+        let unitPerempuan = a.jumlah;
+        let unitTotal = unitLaki + unitPerempuan;
+        const sisaNominal = hartaDibagi * (sisaUntukAshobah / penyebutBersama);
+        nominal = (sisaNominal * unitPerempuan) / unitTotal;
+        fraksiStr = 'Ashobah 1/' + (unitTotal/unitPerempuan).toFixed(1) + ' dari sisa';
+      }
+    }
+
+    hasilAhli.push({...a, nominal, fraksiStr});
+  });
+
+  if (totalFardh > penyebutBersama) {
+    aul = true;
+    const faktor = penyebutBersama / totalFardh;
+    hasilAhli.forEach(a => {
+      if (!a.hajb && a.fardh) {
+        a.nominal = hartaDibagi * (a.fardh[0] / a.fardh[1]) * faktor;
+        a.fraksiStr += ' (dikurangi aul)';
+      }
+    });
+  }
+
+  const totalTerbagi = hasilAhli.reduce((s, a) => s + a.nominal, 0);
+  const sisaRadd = hartaDibagi - totalTerbagi;
+  if (!aul && sisaRadd > 1 && ashobahList.length === 0) {
+    radd = true;
+    const penerimRadd = hasilAhli.filter(a => !a.hajb && a.fardh && a.id !== 'suami' && a.id !== 'istri');
+    const totalBagianRadd = penerimRadd.reduce((s,a) => s + (a.fardh ? a.fardh[0]/a.fardh[1] : 0), 0);
+    penerimRadd.forEach(a => {
+      const proporsi = (a.fardh[0]/a.fardh[1]) / totalBagianRadd;
+      a.nominal += sisaRadd * proporsi;
+      a.fraksiStr += ' + radd';
+    });
+  }
+
+  // ============ RENDER ============
+  document.getElementById('faraidh-result').style.display = 'block';
+  document.getElementById('res-harta-bersih').textContent = fmt(hartaDibagi);
+  
+  let infoHartaArr = [];
+  if (pemakaman > 0) infoHartaArr.push(`Biaya pemakaman: ${fmt(pemakaman)}`);
+  if (hutang > 0) infoHartaArr.push(`Hutang: ${fmt(hutang)}`);
+  if (wasiatEfektif > 0) infoHartaArr.push(`Wasiat: ${fmt(wasiatEfektif)}`);
+  if (wasiat > batasWasiat && wasiat > 0) infoHartaArr.push(`⚠️ Wasiat melebihi 1/3, disesuaikan menjadi ${fmt(batasWasiat)}`);
+  document.getElementById('res-info-harta').textContent = infoHartaArr.length ? infoHartaArr.join(' · ') : 'Harta bersih siap dibagikan';
+
+  let specialHTML = '';
+  if (aul) specialHTML += `<div class="info-box aul"><strong>⚠️ Kasus 'Aul (عَوْل)</strong>Total bagian fardh melebihi harta (penyebut bersama). Solusi: seluruh bagian dikurangi secara proporsional agar total = 100%.</div>`;
+  if (radd) specialHTML += `<div class="info-box radd"><strong>↩️ Kasus Radd (رَدّ)</strong>Masih ada sisa harta setelah dibagikan dan tidak ada ashobah. Sisa dikembalikan kepada ashabul furudh (kecuali pasangan) secara proporsional.</div>`;
+  if (ummariyatayn) specialHTML += `<div class="info-box ummariyatayn"><strong>📐 Kasus Ummariyatayn / Gharrawayn</strong>${infoUmmariyatayn}</div>`;
+  document.getElementById('res-special-info').innerHTML = specialHTML;
+
+  let gridHTML = '';
+  hasilAhli.forEach(a => {
+    const isHajb = a.hajb;
+    const nomStr = isHajb ? '—' : fmt(a.nominal);
+    const perOrg = (!isHajb && a.jumlah > 1) ? `<div class="ahli-alasan">Per orang: ${fmt(a.nominal / a.jumlah)}</div>` : '';
+    gridHTML += `<div class="ahli-card ${isHajb ? 'hajb' : 'mendapat'}">
+      <div class="ahli-name">${a.nama}${a.jumlah > 1 ? ' (×'+a.jumlah+')' : ''}</div>
+      ${isHajb
+        ? `<div class="ahli-status">GUGUR / MAHJUB</div><div class="ahli-alasan">${a.alasan_hajb}</div>`
+        : `<div class="ahli-bagian">${a.fraksiStr}</div><div class="ahli-nominal">${nomStr}</div>${perOrg}`
+      }
+    </div>`;
+  });
+  document.getElementById('res-ahli-grid').innerHTML = gridHTML;
+
+  renderFamilyTree(hasilAhli, jenisMayyit);
+
+  let penjelasanHTML = `<p style="margin-bottom:12px;">Setelah dikurangi biaya pemakaman, hutang, dan wasiat, harta yang dibagikan adalah <strong>${fmt(hartaDibagi)}</strong>. Berikut rincian tiap ahli waris:</p><ul style="padding-left:20px;">`;
+  hasilAhli.forEach(a => {
+    if (a.hajb) {
+      penjelasanHTML += `<li style="margin-bottom:6px;color:#906060;"><strong>${a.nama}</strong>: Terhijab (gugur hak warisnya) — ${a.alasan_hajb}.</li>`;
+    } else if (a.alasan) {
+      penjelasanHTML += `<li style="margin-bottom:6px;"><strong>${a.nama}</strong>: ${a.alasan} Bagian: ${fmt(a.nominal)}.</li>`;
+    }
+  });
+  penjelasanHTML += '</ul>';
+  if (aul) penjelasanHTML += `<p style="margin-top:12px;padding:12px;background:var(--gold-pale);border-radius:8px;font-size:13.5px;">📌 <strong>Catatan 'Aul:</strong> Terjadi karena jumlah bagian fardh melebihi 100%. Seluruh bagian dikurangi proporsional. Ini adalah pendapat mayoritas sahabat dan jumhur ulama (kecuali Ibnu Abbas).</p>`;
+  if (radd) penjelasanHTML += `<p style="margin-top:12px;padding:12px;background:#e8f0ff;border-radius:8px;font-size:13.5px;">📌 <strong>Catatan Radd:</strong> Sisa harta dikembalikan ke ahli waris furudh (selain suami/istri) secara proporsional. Pendapat jumhur ulama menerima radd.</p>`;
+  document.getElementById('res-penjelasan').innerHTML = penjelasanHTML;
+  document.getElementById('faraidh-result').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function renderFamilyTree(ahli, jenisMayyit) {
+  const find = (id) => ahli.find(a => a.id === id);
+  const box = (a) => {
+    if (!a) return '';
+    const cls = a.hajb ? 'hajb' : 'mendapat';
+    const bagian = a.hajb ? 'GUGUR' : a.fraksiStr;
+    return `<div class="tree-node">
+      <div class="tree-node-box ${cls}">${a.nama}${a.jumlah>1?' (×'+a.jumlah+')':''}</div>
+      <div class="${a.hajb ? 'tree-node-hajb-text' : 'tree-node-bagian'}">${bagian}</div>
+    </div>`;
+  };
+
+  let html = '';
+  const kakek = find('kakek'), nenek = find('nenek');
+  if (kakek || nenek) {
+    html += `<div class="tree-row">${kakek ? box(kakek) : ''}${nenek ? box(nenek) : ''}</div>`;
+    html += `<div class="tree-connector">↓</div>`;
+  }
+  const ayah = find('ayah'), ibu = find('ibu');
+  if (ayah || ibu) {
+    html += `<div class="tree-row">${ayah ? box(ayah) : ''}${ibu ? box(ibu) : ''}</div>`;
+    html += `<div class="tree-connector">↓</div>`;
+  }
+  const suami = find('suami'), istri = find('istri');
+  let pasanganRow = '';
+  if (suami) pasanganRow += box(suami) + '<span style="margin:0 12px;color:var(--gold);font-size:20px;">⚭</span>';
+  pasanganRow += `<div class="tree-node"><div class="tree-node-box mayyit">👤 Pewaris (${jenisMayyit === 'laki' ? 'Almarhum' : 'Almarhumah'})</div></div>`;
+  if (istri) pasanganRow += '<span style="margin:0 12px;color:var(--gold);font-size:20px;">⚭</span>' + box(istri);
+  html += `<div class="tree-row">${pasanganRow}</div>`;
+  const anakL = find('anak-laki'), anakP = find('anak-perempuan');
+  if (anakL || anakP) {
+    html += `<div class="tree-connector">↓</div>`;
+    html += `<div class="tree-row">${anakL ? box(anakL) : ''}${anakP ? box(anakP) : ''}</div>`;
+  }
+  const cucuL = find('cucu-laki'), cucuP = find('cucu-perempuan');
+  if (cucuL || cucuP) {
+    html += `<div class="tree-connector">↓</div>`;
+    html += `<div class="tree-row">${cucuL ? box(cucuL) : ''}${cucuP ? box(cucuP) : ''}</div>`;
+  }
+  const sdrL = find('sdr-laki'), sdrP = find('sdr-perempuan'), sdrLA = find('sdr-laki-ayah'), sdrPA = find('sdr-perempuan-ayah');
+  if (sdrL || sdrP || sdrLA || sdrPA) {
+    html += `<div style="text-align:center;margin:12px 0 4px;font-size:12px;color:var(--text-light);">— Saudara —</div>`;
+    html += `<div class="tree-row">${sdrL ? box(sdrL) : ''}${sdrP ? box(sdrP) : ''}${sdrLA ? box(sdrLA) : ''}${sdrPA ? box(sdrPA) : ''}</div>`;
+  }
+
+  document.getElementById('family-tree').innerHTML = html;
+}
+
+function resetWaris() {
+  document.querySelectorAll('#page-waris input[type=number]').forEach(i => i.value = '0');
+  document.querySelectorAll('#page-waris select').forEach(i => i.value = '0');
+  document.querySelectorAll('#page-waris input[type=checkbox]').forEach(i => i.checked = false);
+  document.getElementById('total-harta').value = '';
+  document.getElementById('faraidh-result').style.display = 'none';
+}
+
+// ===================================================
+// ZAKAT ENGINE
+// ===================================================
+let activeZakat = 'maal';
+function selectZakat(type) {
+  activeZakat = type;
+  document.querySelectorAll('.zakat-type-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.zakat-form-section').forEach(f => f.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.getElementById('form-' + type).classList.add('active');
+  document.getElementById('zakat-result').style.display = 'none';
+}
+
+function showZakatResult(rows, wajib, jumlahZakat, extraNote) {
+  let html = rows.map(r => `<div class="result-row ${r.cls||''}">
+    <span>${r.label}</span><span>${r.value}</span>
+  </div>`).join('');
+  
+  if (wajib) {
+    html += `<div class="result-wajib">
+      <div class="rw-label">Zakat yang Wajib Dibayar</div>
+      <div class="rw-amount">${fmt(jumlahZakat)}</div>
+    </div>`;
+  } else {
+    html += `<div class="result-tidak-wajib">✅ Belum mencapai nisab, <strong>tidak wajib</strong> zakat saat ini.<br><small style="color:var(--text-light);">Meski begitu, sedekah tetap sangat dianjurkan.</small></div>`;
+  }
+  if (extraNote) html += `<div style="margin-top:12px;padding:12px;background:var(--green-whisper);border-radius:10px;font-size:13.5px;color:var(--text-mid);line-height:1.7;">${extraNote}</div>`;
+  
+  document.getElementById('zakat-result-inner').innerHTML = html;
+  document.getElementById('zakat-result').style.display = 'block';
+  document.getElementById('zakat-result').scrollIntoView({behavior:'smooth'});
+}
+
+function hitungZakatMaal() {
+  const tunai = getVal('maal-tunai');
+  const deposito = getVal('maal-deposito');
+  const piutang = getVal('maal-piutang');
+  const hargaEmas = getVal('maal-harga-emas') || 1200000;
+  const total = tunai + deposito + piutang;
+  const nisab = 85 * hargaEmas;
+  const wajib = total >= nisab;
+  const zakatAmount = total * 0.025;
+  showZakatResult([
+    {label:'Total Harta', value: fmt(total)},
+    {label:'Nisab (85 gr emas)', value: fmt(nisab)},
+    {label:'Status Nisab', value: total >= nisab ? '✅ Sudah Mencapai Nisab' : '❌ Belum Mencapai Nisab', cls: total >= nisab ? 'nisab-check' : 'nisab-check tidak'},
+    {label:'Kadar Zakat', value:'2,5%'},
+    {label:'Zakat Maal (2,5%)', value: fmt(zakatAmount), cls:'total'},
+  ], wajib, zakatAmount, 'Zakat maal wajib bila harta tersimpan selama 1 tahun penuh (haul). Pastikan Anda menghitung dari tanggal pertama kali harta mencapai nisab.');
+}
+
+function hitungZakatPenghasilan() {
+  const bruto = getVal('peng-bruto');
+  const lain = getVal('peng-lain');
+  const hargaBeras = getVal('peng-harga-beras') || 12000;
+  const hargaEmas = getVal('peng-harga-emas') || 1200000;
+  const jenisNisab = document.getElementById('peng-nisab-jenis').value;
+  const total = bruto + lain;
+  
+  let nisab = 0;
+  let labelNisab = '';
+  
+  if (jenisNisab === 'pertanian') {
+    nisab = 520 * hargaBeras;
+    labelNisab = 'Nisab (520 kg beras)';
+  } else {
+    nisab = (85 * hargaEmas) / 12;
+    labelNisab = 'Nisab (85 gr emas / 12 bln)';
+  }
+
+  const wajib = total >= nisab;
+  const zakatAmount = total * 0.025;
+  showZakatResult([
+    {label:'Total Penghasilan/Bulan', value: fmt(total)},
+    {label:labelNisab, value: fmt(nisab)},
+    {label:'Status Nisab', value: total >= nisab ? '✅ Sudah Mencapai Nisab' : '❌ Belum Mencapai Nisab', cls: total >= nisab ? 'nisab-check' : 'nisab-check tidak'},
+    {label:'Kadar Zakat', value:'2,5%'},
+    {label:'Zakat Penghasilan', value: fmt(zakatAmount), cls:'total'},
+    {label:'Zakat Per Tahun', value: fmt(zakatAmount * 12)},
+  ], wajib, zakatAmount, 'Zakat penghasilan dikeluarkan setiap bulan saat gaji diterima (pendapat Yusuf Qardawi & mayoritas ulama kontemporer) atau boleh juga dikumpulkan dan dibayar setahun sekali. Jika standar emas, nisab 85 gr dibagi 12 bulan.');
+}
+
+function hitungZakatFitrah() {
+  const jiwa = getVal('fitrah-jiwa') || 1;
+  const hargaBeras = getVal('fitrah-harga-beras') || 15000;
+  const berasPerJiwa = 2.5;
+  const zakatPerJiwa = berasPerJiwa * hargaBeras;
+  const totalZakat = zakatPerJiwa * jiwa;
+  showZakatResult([
+    {label:'Jumlah Jiwa', value: jiwa + ' orang'},
+    {label:'Zakat Per Jiwa', value: berasPerJiwa + ' kg beras = ' + fmt(zakatPerJiwa)},
+    {label:'Total Zakat Fitrah', value: fmt(totalZakat), cls:'total'},
+    {label:'Dalam Beras', value: (berasPerJiwa * jiwa) + ' kg'},
+  ], true, totalZakat, 'Zakat fitrah WAJIB bagi setiap Muslim yang mampu. Dibayar mulai awal Ramadhan hingga sebelum Shalat Idul Fitri. Kepala keluarga menanggung zakat seluruh anggota keluarga yang dinafkahi.');
+}
+
+function hitungZakatEmas() {
+  const emasGram = getVal('emas-gram');
+  const emasHarga = getVal('emas-harga') || 1200000;
+  const perakGram = getVal('perak-gram');
+  const perakHarga = getVal('perak-harga') || 15000;
+  const nilaiEmas = emasGram * emasHarga;
+  const nilaiPerak = perakGram * perakHarga;
+  const totalNilai = nilaiEmas + nilaiPerak;
+  const nisabEmas = 85 * emasHarga;
+  const wajib = emasGram >= 85 || perakGram >= 595;
+  const zakatAmount = totalNilai * 0.025;
+  showZakatResult([
+    {label:'Emas: ' + emasGram + ' gr', value: fmt(nilaiEmas)},
+    {label:'Perak: ' + perakGram + ' gr', value: fmt(nilaiPerak)},
+    {label:'Total Nilai', value: fmt(totalNilai)},
+    {label:'Nisab Emas (85 gr)', value: emasGram >= 85 ? '✅ Tercapai ('+emasGram+' gr)' : '❌ Belum ('+emasGram+'/85 gr)', cls: emasGram >= 85 ? 'nisab-check' : 'nisab-check tidak'},
+    {label:'Nisab Perak (595 gr)', value: perakGram >= 595 ? '✅ Tercapai' : '❌ Belum', cls: perakGram >= 595 ? 'nisab-check' : 'nisab-check tidak'},
+    {label:'Kadar Zakat', value:'2,5%'},
+    {label:'Zakat Emas & Perak', value: fmt(zakatAmount), cls:'total'},
+  ], wajib, zakatAmount, 'Emas perhiasan yang dipakai sehari-hari: para ulama berbeda pendapat. Mazhab Hanafi & sebagian ulama mewajibkan zakat. Mazhab Syafi\'i berpendapat tidak wajib untuk perhiasan yang dipakai wajar. Untuk keamanan, sebaiknya dikeluarkan zakatnya.');
+}
+
+function hitungZakatDagang() {
+  const stok = getVal('dag-stok');
+  const kas = getVal('dag-kas');
+  const piutang = getVal('dag-piutang');
+  const hutang = getVal('dag-hutang');
+  const hargaEmas = getVal('dag-harga-emas') || 1200000;
+  const hartaBersih = stok + kas + piutang - hutang;
+  const nisab = 85 * hargaEmas;
+  const wajib = hartaBersih >= nisab;
+  const zakatAmount = hartaBersih * 0.025;
+  showZakatResult([
+    {label:'Stok Barang', value: fmt(stok)},
+    {label:'Kas & Setara Kas', value: fmt(kas)},
+    {label:'Piutang Dagang', value: fmt(piutang)},
+    {label:'Hutang Jangka Pendek', value: '(' + fmt(hutang) + ')'},
+    {label:'Harta Dagang Bersih', value: fmt(hartaBersih), cls:'total'},
+    {label:'Nisab (85 gr emas)', value: fmt(nisab)},
+    {label:'Status', value: wajib ? '✅ Wajib Zakat' : '❌ Belum Wajib', cls: wajib ? 'nisab-check' : 'nisab-check tidak'},
+    {label:'Zakat Perdagangan (2,5%)', value: fmt(zakatAmount), cls:'total'},
+  ], wajib, zakatAmount, 'Zakat perdagangan dihitung saat haul (genap 1 tahun). Hutang yang diperhitungkan hanya hutang jangka pendek yang jatuh tempo dalam tahun berjalan.');
+}
+
+function hitungZakatTani() {
+  const hasil = getVal('tani-hasil');
+  const pengairan = document.getElementById('tani-pengairan').value;
+  const hargaGabah = getVal('tani-harga') || 5000;
+  const nisabKg = 653;
+  const wajib = hasil >= nisabKg;
+  const kadar = pengairan === 'hujan' ? 0.10 : 0.05;
+  const zakatKg = hasil * kadar;
+  const zakatRp = zakatKg * hargaGabah;
+  const nilaiPanen = hasil * hargaGabah;
+  showZakatResult([
+    {label:'Hasil Panen', value: hasil.toLocaleString('id-ID') + ' kg'},
+    {label:'Nilai Panen', value: fmt(nilaiPanen)},
+    {label:'Nisab Pertanian', value: nisabKg + ' kg gabah'},
+    {label:'Status Nisab', value: wajib ? '✅ Wajib Zakat' : '❌ Belum Wajib', cls: wajib ? 'nisab-check' : 'nisab-check tidak'},
+    {label:'Jenis Pengairan', value: pengairan === 'hujan' ? 'Tadah Hujan' : 'Irigasi/Pompa'},
+    {label:'Kadar Zakat', value: (kadar*100) + '%'},
+    {label:'Zakat (dalam kg)', value: zakatKg.toLocaleString('id-ID') + ' kg'},
+    {label:'Zakat (dalam Rupiah)', value: fmt(zakatRp), cls:'total'},
+  ], wajib, zakatRp, 'Zakat pertanian tidak ada syarat haul — langsung dikeluarkan setiap kali panen. Nisab 653 kg mengacu pada 5 wasaq (1 wasaq = 60 sha\', 1 sha\' ≈ 2,176 kg).');
+}
+
+// ===================================================
+// GLOSARIUM DATA
+// ===================================================
+const glosData = [
+  // WARIS
+  {term:'Faraidh', arabic:'الفَرَائِض', kategori:'waris', definisi:'Ilmu yang membahas tata cara pembagian harta warisan menurut syariat Islam. Berasal dari kata "fardh" (bagian yang telah ditentukan). Para ulama menyebutnya sebagai "setengah ilmu" karena kepentingannya yang sangat besar dalam masyarakat Muslim.'},
+  {term:'Mayyit / Pewaris', arabic:'المَيِّت', kategori:'waris', definisi:'Orang yang meninggal dunia dan meninggalkan harta serta ahli waris. Harta baru bisa dibagi setelah dikurangi biaya pemakaman, pelunasan hutang, dan pelaksanaan wasiat (maks. 1/3 harta bersih).'},
+  {term:'Ahli Waris', arabic:'الوَارِث', kategori:'waris', definisi:'Orang yang berhak menerima bagian harta warisan. Syarat menjadi ahli waris: (1) Masih hidup saat pewaris meninggal, (2) Tidak terhalang/terhijab, (3) Tidak ada penghalang waris seperti membunuh pewaris atau berbeda agama.'},
+  {term:'Ashabul Furudh', arabic:'أَصْحَاب الفُرُوض', kategori:'waris', definisi:'Ahli waris yang mendapat bagian tertentu (taqdir) yang sudah ditetapkan Al-Qur\'an, yaitu: 1/2, 1/4, 1/8, 2/3, 1/3, dan 1/6. Terdiri dari: suami/istri, ayah, ibu, anak perempuan, cucu perempuan, saudara perempuan, nenek, dan kakek.'},
+  {term:'Ashobah', arabic:'العَصَبَة', kategori:'waris', definisi:'Ahli waris yang mendapat sisa harta setelah ashabul furudh mengambil bagiannya. Dibagi 3: (1) Ashobah binafsi — laki-laki yang sendirian menjadi ashobah (anak laki, ayah, dll), (2) Ashobah bil ghair — perempuan yang menjadi ashobah karena ada saudaranya yang laki-laki, (3) Ashobah ma\'al ghair — saudara perempuan kandung/seayah yang menjadi ashobah karena ada anak/cucu perempuan.'},
+  {term:'Hajb', arabic:'الحَجْب', kategori:'waris', definisi:'Penghalang yang menyebabkan seseorang gugur dari warisan karena adanya ahli waris yang lebih dekat. Ada dua jenis: (1) Hajb Hirman — terhalang sepenuhnya, contoh: saudara terhalang oleh anak laki, (2) Hajb Nuqshan — bagiannya berkurang, contoh: suami berkurang dari 1/2 menjadi 1/4 karena ada anak.'},
+  {term:'\'Aul (عَوْل)', arabic:'العَوْل', kategori:'waris', definisi:'Keadaan ketika total bagian fardh dari semua ahli waris melebihi jumlah harta warisan (melebihi "1"). Solusi: penyebut bersama dinaikkan sehingga semua bagian berkurang secara proporsional. Contoh: total fardh = 7/6, maka penyebut dijadikan 7. Pertama kali diterapkan pada masa Khalifah Umar bin Khattab.', badge:'aul'},
+  {term:'Radd (رَدّ)', arabic:'الرَّدّ', kategori:'waris', definisi:'Kebalikan dari \'aul. Terjadi ketika tidak ada ashobah dan masih ada sisa harta setelah ashabul furudh mengambil bagian. Sisa dikembalikan (radd) kepada ashabul furudh secara proporsional, kecuali suami/istri (menurut pendapat jumhur ulama).', badge:'radd'},
+  {term:'Ummariyatayn / Gharrawayn', arabic:'العُمَرِيَّتَيْن / الغَرَّاوَيْن', kategori:'waris', definisi:'Dua masalah khusus warisan yang diputuskan oleh Umar bin Khattab (lalu diikuti Utsman & Ali): ketika ahli waris hanya Suami/Istri + Ayah + Ibu (tanpa anak). Dalam kasus ini Ibu tidak mendapat 1/3 penuh dari harta, melainkan 1/3 dari SISA setelah bagian suami/istri. Tujuannya agar Ayah tidak mendapat lebih sedikit dari Ibu. Contoh: Suami + Ibu + Ayah → Suami 1/2, Ibu 1/3 dari sisa (= 1/6), Ayah 1/3 dari sisa (= 1/3).', badge:'ummariyatayn'},
+  {term:'Wasiat', arabic:'الوَصِيَّة', kategori:'waris', definisi:'Perintah pewaris untuk memberikan sebagian hartanya kepada pihak tertentu setelah kematiannya. Syariat membatasi wasiat maksimal 1/3 dari harta bersih, dan tidak boleh untuk ahli waris. Wasiat dilaksanakan sebelum pembagian warisan.'},
+  {term:'Mahjub', arabic:'المَحْجُوب', kategori:'waris', definisi:'Ahli waris yang tertutup/terhijab hak warisnya karena keberadaan ahli waris lain yang lebih kuat posisinya. Contoh: Kakek terhalang (mahjub) oleh Ayah. Cucu laki terhalang oleh Anak Laki-laki.'},
+  {term:'Dzawil Furudh', arabic:'ذَوِي الفُرُوض', kategori:'waris', definisi:'Sama dengan Ashabul Furudh — ahli waris dengan bagian pasti. Enam bagian yang disebutkan Al-Qur\'an: 1/2, 1/4, 1/8, 2/3, 1/3, 1/6.'},
+  {term:'Dzawil Arham', arabic:'ذَوِي الأَرْحَام', kategori:'waris', definisi:'Kerabat jauh yang tidak termasuk ashobah maupun ashabul furudh, seperti paman dari pihak ibu, bibi, cucu dari anak perempuan, dll. Menurut mazhab Hanafi & Hanbali mereka tetap mendapat warisan jika tidak ada ahli waris lain. Menurut Mazhab Maliki & Syafi\'i, harta diberikan ke Baitul Mal.'},
+  {term:'Tirkah', arabic:'التَّرِكَة', kategori:'waris', definisi:'Seluruh harta peninggalan yang ditinggalkan oleh pewaris sebelum dikurangi apapun. Harta bersih yang dibagikan adalah Tirkah dikurangi biaya pemakaman, hutang, dan wasiat.'},
+
+  // ZAKAT
+  {term:'Zakat', arabic:'الزَّكَاة', kategori:'zakat', definisi:'Rukun Islam ke-3. Secara bahasa berarti suci, tumbuh, dan berkah. Secara istilah: kadar tertentu dari harta yang wajib dikeluarkan kepada golongan yang berhak (asnaf 8) bila telah memenuhi syarat nisab dan haul.'},
+  {term:'Nisab', arabic:'النِّصَاب', kategori:'zakat', definisi:'Batas minimum harta yang mewajibkan zakat. Nisab berbeda-beda: Emas = 85 gram, Perak = 595 gram, Perdagangan = senilai 85 gram emas, Pertanian = 653 kg gabah, Penghasilan = 520 kg beras per bulan.'},
+  {term:'Haul', arabic:'الحَوْل', kategori:'zakat', definisi:'Syarat satu tahun penuh kepemilikan harta mencapai nisab sebelum wajib zakat. Berlaku untuk: zakat maal, emas, perak, perdagangan, dan ternak. Tidak berlaku untuk: zakat pertanian (langsung tiap panen) dan zakat fitrah.'},
+  {term:'Muzakki', arabic:'المُزَكِّي', kategori:'zakat', definisi:'Orang yang wajib mengeluarkan zakat — Muslim yang merdeka, berakal, baligh, dan hartanya telah memenuhi syarat nisab dan haul.'},
+  {term:'Mustahiq', arabic:'المُسْتَحِق', kategori:'zakat', definisi:'8 golongan yang berhak menerima zakat (asnaf tsmaniyah) berdasarkan QS. At-Taubah:60: (1) Fakir, (2) Miskin, (3) Amil (pengelola zakat), (4) Muallaf, (5) Riqab (memerdekakan budak), (6) Gharimin (orang terlilit hutang), (7) Fi sabilillah, (8) Ibnu sabil (musafir yang kehabisan bekal).'},
+  {term:'Zakat Maal', arabic:'زَكَاة المَال', kategori:'zakat', definisi:'Zakat atas harta simpanan yang telah mencapai nisab dan haul. Meliputi: uang tunai, tabungan, deposito, piutang yang bisa ditagih, emas/perak, dan aset yang tidak digunakan. Kadar: 2,5%.'},
+  {term:'Zakat Fitrah', arabic:'زَكَاة الفِطْر', kategori:'zakat', definisi:'Zakat yang wajib dikeluarkan oleh setiap Muslim di bulan Ramadhan hingga sebelum Shalat Idul Fitri. Besarnya 1 sha\' (± 2,5 kg) bahan makanan pokok atau nilainya. Tujuan: menyucikan diri dan membahagiakan fakir miskin di hari raya.'},
+  {term:'Zakat Penghasilan (Profesi)', arabic:'زَكَاة الرَّاتِب', kategori:'zakat', definisi:'Zakat dari penghasilan profesi modern seperti gaji, honorarium, dll. Nisab = 520 kg beras per bulan. Kadar 2,5% dari bruto. Dikeluarkan tiap bulan atau dikumpulkan setahun lalu dibayar sekaligus. Landasan: QS. Al-Baqarah:267 dan ijtihad ulama kontemporer.'},
+  {term:'Zakat Tijarah (Perdagangan)', arabic:'زَكَاة التِّجَارَة', kategori:'zakat', definisi:'Zakat atas harta yang diperdagangkan. Dihitung dari: Stok Barang + Kas + Piutang − Hutang Jangka Pendek. Syarat nisab = 85 gram emas. Kadar: 2,5%. Dihitung tiap tahun (haul).'},
+  {term:'Zakat Zira\'ah (Pertanian)', arabic:'زَكَاة الزِّرَاعَة', kategori:'zakat', definisi:'Zakat hasil pertanian. Nisab: 653 kg gabah (5 wasaq). Kadar: 10% jika tadah hujan, 5% jika menggunakan irigasi/biaya. Tidak ada syarat haul — dikeluarkan langsung setiap panen.'},
+  {term:'Amil Zakat', arabic:'عَامِل الزَّكَاة', kategori:'zakat', definisi:'Orang atau lembaga yang bertugas mengumpulkan, mengelola, dan mendistribusikan zakat. Termasuk salah satu dari 8 golongan mustahiq yang berhak mendapat bagian dari zakat. Di Indonesia direpresentasikan oleh BAZNAS dan LAZ resmi.'},
+  {term:'Infak & Sedekah', arabic:'الإِنْفَاق وَالصَّدَقَة', kategori:'zakat', definisi:'Berbeda dari zakat: infak dan sedekah bersifat sunnah (tidak wajib) dan tidak terikat nisab/haul. Sedekah bisa diberikan kepada siapa saja, tidak hanya 8 asnaf. Keduanya sangat dianjurkan bahkan bagi yang belum mencapai nisab zakat.'},
+];
+
+function renderGlosarium(data) {
+  let html = '';
+  if (data.length === 0) {
+    html = '<div style="text-align:center;padding:40px;color:var(--text-light);">Tidak ditemukan istilah yang sesuai.</div>';
+  }
+  data.forEach((item, i) => {
+    const badgeHTML = item.badge ? `<span class="badge ${item.badge}">${item.badge.toUpperCase()}</span>` : '';
+    html += `<div class="glos-item" id="glos-${i}">
+      <div class="glos-header" onclick="toggleGlos(${i})">
+        <div>
+          <span class="glos-term">${item.term}</span>
+          <span class="glos-arabic">${item.arabic}</span>
+          ${badgeHTML}
+        </div>
+        <span class="glos-chevron">▼</span>
+      </div>
+      <div class="glos-body">
+        <span class="glos-tag ${item.kategori}">${item.kategori === 'waris' ? '⚖️ Faraidh/Waris' : '🌙 Zakat'}</span>
+        <div>${item.definisi}</div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('glos-container').innerHTML = html;
+}
+
+function toggleGlos(i) {
+  const el = document.getElementById('glos-' + i);
+  el.classList.toggle('open');
+}
+
+let activeTab = 'semua';
+function filterTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.glos-tab').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  filterGlosarium();
+}
+
+function filterGlosarium() {
+  const q = (document.getElementById('glos-search').value || '').toLowerCase();
+  let filtered = glosData;
+  if (activeTab !== 'semua') filtered = filtered.filter(g => g.kategori === activeTab);
+  if (q) filtered = filtered.filter(g => g.term.toLowerCase().includes(q) || g.definisi.toLowerCase().includes(q) || g.arabic.includes(q));
+  renderGlosarium(filtered);
+}
+
+// Init
+renderGlosarium(glosData);
+</script>
+</body>
+</html>
