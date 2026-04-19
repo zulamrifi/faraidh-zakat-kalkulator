@@ -1,6 +1,6 @@
 {
-  "name": "Arsip Digital KUA Sekongkang",
-  "short_name": "Arsip KUA",
+  "name": "Mirats dan Zakat Kalkulator",
+  "short_name": "Mirats dan Zakat Kalkulator",
   "start_url": "./index.html",
   "display": "standalone",
   "icons": [
